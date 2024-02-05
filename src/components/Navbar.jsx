@@ -1,17 +1,61 @@
+import { NavLink } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { logoutUser, selectIsLoggedIn } from "../state/slices/authSlice";
 import { useState } from "react";
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
+  const isLoggedIn = useSelector(selectIsLoggedIn);
+  const dispatch = useDispatch();
+
+  const handleLogout = () => {
+    dispatch(logoutUser());
+  };
 
   const toggle = () => {
     setOpen(!open);
   };
+
   return (
-    <div>
-      <div className="hidden lg:flex justify-around bg-slate-700 p-4">
-        <div>Home</div>
-        <div>Tasks</div>
-        <div>Login</div>
+    <div className="">
+      <div className="hidden lg:flex justify-around rounded-md bg-slate-700 p-4">
+        <NavLink
+          to={"/"}
+          className={({ isActive }) =>
+            `hover:bg-gray-600 duration-500 px-4 py-2 rounded-md ${
+              isActive ? "text-black bg-white" : "text-white"
+            }`
+          }
+        >
+          Home
+        </NavLink>
+        <NavLink
+          to={"/all-task"}
+          className={({ isActive }) =>
+            `hover:bg-gray-600 duration-500 px-4 py-2 rounded-md ${
+              isActive ? "text-black bg-white" : "text-white"
+            }`
+          }
+        >
+          Tasks
+        </NavLink>
+        {isLoggedIn ? (
+          <div>
+            <button
+              onClick={handleLogout}
+              className="hover:bg-red-600 duration-500 px-4 py-2 rounded-md text-white"
+            >
+              Logout
+            </button>
+          </div>
+        ) : (
+          <NavLink
+            to={"/login"}
+            className="hover:bg-gray-600 duration-500 px-4 py-2 rounded-md text-white"
+          >
+            Login
+          </NavLink>
+        )}
       </div>
       <div className="lg:hidden flex justify-between items-center bg-slate-700 p-4">
         <button onClick={toggle} className="text-white">
@@ -31,14 +75,49 @@ const Navbar = () => {
           </svg>
         </button>
         <div
+          to={"/"}
           className={`lg:hidden fixed top-0 right-0 h-full bg-slate-700 p-10 transform ${
             open ? "translate-x-0" : "translate-x-full"
           } transition-transform duration-300 ease-in-out`}
         >
-          <div className="flex flex-col items-center">
-            <div className="my-4 ">Home</div>
-            <div className="my-4">Tasks</div>
-            <div className="my-4">Login</div>
+          <div className="flex flex-col items-center my-4">
+            <NavLink
+              to={"/"}
+              className={({ isActive }) =>
+                `hover:bg-gray-600 duration-500 px-4 py-2 rounded-md ${
+                  isActive ? "text-black bg-white" : "text-white"
+                }`
+              }
+            >
+              Home
+            </NavLink>
+            <NavLink
+              to={"/all-task"}
+              className={({ isActive }) =>
+                `hover:bg-gray-600 duration-500 px-4 py-2 rounded-md ${
+                  isActive ? "text-black bg-white" : "text-white"
+                }`
+              }
+            >
+              Tasks
+            </NavLink>
+            {isLoggedIn ? (
+              <div>
+                <button
+                  onClick={handleLogout}
+                  className="hover:bg-red-600 duration-500 px-4 py-2 rounded-md text-white"
+                >
+                  Logout
+                </button>
+              </div>
+            ) : (
+              <NavLink
+                to={"login"}
+                className="hover:bg-gray-600 duration-500 px-4 py-2 rounded-md text-white"
+              >
+                Login
+              </NavLink>
+            )}
           </div>
         </div>
       </div>
